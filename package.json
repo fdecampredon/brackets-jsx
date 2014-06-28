@@ -1,14 +1,26 @@
 {
-    "name": "fdecampredon.brackets-jsx",
-    "title": "JSHint",
-    "description": "Adds React JSX support to Brackets.",
-    "homepage": "https://github.com/fdecampredon/brackets-jsx",
-    "version": "0.1.0",
-    "keywords":["lint","linting","linter"],
-    "categories":"linting",
-    "author": "François de Campredon <francois.de.campredon@gmail.com> (http://github.com/fdecampredon)",
-    "license": "MIT",
-    "engines": {
-        "brackets": ">=0.38.0"
-    }
+  "name": "fdecampredon.brackets-jsx",
+  "title": "JSHint",
+  "description": "Adds React JSX support to Brackets.",
+  "homepage": "https://github.com/fdecampredon/brackets-jsx",
+  "version": "0.1.0",
+  "keywords": [
+    "lint",
+    "linting",
+    "linter"
+  ],
+  "categories": "linting",
+  "author": "François de Campredon <francois.de.campredon@gmail.com> (http://github.com/fdecampredon)",
+  "license": "MIT",
+  "engines": {
+    "brackets": ">=0.38.0"
+  },
+  "devDependencies": {
+    "jstransform": "~5.0.0",
+    "react-tools": "~0.10.0",
+    "browserify": "~4.2.0"
+  },
+  "scripts": {
+      "build": "browserify -s transformJSX transform-jsx.js -o transform-jsx.umd.js"
+  }
 }

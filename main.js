@@ -21,6 +21,8 @@ define(function (require, exports, module) {
 
     require("jshint/jshint");
     
+    var transformJSX = require('./transform-jsx.umd');
+    
     var PREF_SCAN_PROJECT_ONLY = "scanProjectOnly",
         JSHINT_NAME = "JSHint";
     
@@ -66,10 +68,13 @@ define(function (require, exports, module) {
             config = defaultConfig;
         }
         
-        var resultJH = JSHINT(text, config.options, config.globals);
+        var transform = transformJSX(text);
+        
+        
+        var resultJH = JSHINT(transform.source, config.options, config.globals);
 
-        if (!resultJH) {
-            var errors = JSHINT.errors,
+        if (!resultJH || transform.error) {
+            var errors = JSHINT.errors || [],
                 result = { errors: [] },
                 i,
                 len;
@@ -99,6 +104,17 @@ define(function (require, exports, module) {
                         type: type
                     });
                 }
+            }
+            if (transform.error) {
+                result.errors.push({
+                    pos: {
+                        line: transform.error.lineNumber - 1, 
+                        ch: transform.error.column
+                    },
+                    message: transform.error.description,
+                    type: CodeInspection.Type.ERROR
+                });
+                result.errors.sort(compareError);
             }
             return result;
         } else {
@@ -332,6 +348,42 @@ define(function (require, exports, module) {
         str = str.replace(/\/\/[^\n\r]*/g, ""); // Everything after '//'
 
         return str;
+    }
+    
+    
+    
+    /**
+     * compare to codemirror position
+     */
+    function compareError(error1, error2) {
+        var pos1 = error1 && error1.pos;
+        var pos2 =  error2 && error2.pos;
+        // null equals null
+        if (!pos1 && !pos2) {
+            return 0;
+        }
+        // not null superior to null
+        if (pos1 && !pos2) {
+            return 1;
+        }
+        
+        //  null inferior to null
+        if (!pos1 && pos2) {
+            return -1;
+        }
+        
+        //first compare line
+        if (pos1.line < pos2.line) {
+            return -1;
+        } else if (pos1.line > pos2.line) {
+            return 1;
+        //compare ch
+        } else if (pos1.ch > pos2.ch) {
+            return 1;
+        } else if (pos1.ch < pos2.ch) {
+            return -1;
+        } 
+        return 0;
     }
 
     CodeInspection.register("javascript", {
