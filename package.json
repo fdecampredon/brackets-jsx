@@ -16,11 +16,20 @@
     "brackets": ">=0.38.0"
   },
   "devDependencies": {
+    "browserify": "~4.2.0",
     "jstransform": "~5.0.0",
-    "react-tools": "~0.10.0",
-    "browserify": "~4.2.0"
+    "react-tools": "^0.12.1",
+    "reactify": "^0.15.1"
   },
   "scripts": {
-      "build": "browserify -s transformJSX transform-jsx.js -o transform-jsx.umd.js"
+    "build": "browserify -s transformJSX transform-jsx.js -o transform-jsx.umd.js"
+  },
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fdecampredon/brackets-jsx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fdecampredon/brackets-jsx/issues"
   }
 }

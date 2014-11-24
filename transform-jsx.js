@@ -5,10 +5,7 @@ var docblock = require('jstransform/src/docblock');
 module.exports = function transformJSX(source) {
     var error;
     try {
-        var hasDocblock = docblock.parseAsObject(docblock.extract(source)).jsx;
-        if (hasDocblock) {
-            source = react.transform(source, {harmony: true});
-        }
+        source = react.transform(source, {harmony: true, stripTypes: true});
     }
     catch(e) {
         error = e;
